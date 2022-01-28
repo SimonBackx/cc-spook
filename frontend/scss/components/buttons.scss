@@ -1,0 +1,46 @@
+@use "../base/variables.scss" as *;
+
+.button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    user-select: none;
+    cursor: pointer;
+    color: inherit;
+
+    &.primary {
+        background: $color-primary;
+        height: 30px;
+        line-height: 30px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 20px;
+        color: white;
+        border-radius: $border-radius;
+        font-weight: bold;
+        font-size: 11px;
+        transition: background-color 0.2s, transform 0.2s;
+
+        &:hover {
+            background-color: #6619E2;
+        }
+
+        &:active {
+            transform: scale(0.9, 0.9);
+        }
+    }
+
+    &.secundary {
+        font-weight: 600;
+        font-size: 11px;
+        color: $color-gray-1;
+        padding: 5px 0;
+        display: inline-flex;
+        flex-direction: row;
+        align-items: center;
+
+        > .icon:first-child {
+            padding-right: 5px;
+        }
+    }
+}

@@ -19,13 +19,20 @@
     line-height: 1.2;
 }
 
+.style-time {
+    font-size: 11px;
+    font-weight: normal;
+    line-height: 1.2;
+    color: $color-gray-1;
+}
+
 .style-hr {
     height: 1px;
     background: $color-border;
     width: 100%;
     border: 0;
     padding: 0;
-    margin: 20px 0;
+    margin: 0;
 }
 
 // Large, important text (e.g. blog content)
@@ -38,4 +45,17 @@
 .style-text {
     font-size: 13px;
     line-height: 1.5;
+}
+
+// Smaller, less important text
+.style-input {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+// Smaller, less important text
+.style-placeholder {
+    font-size: 11px;
+    font-weight: 500;
+    color: $color-gray-2;
 }

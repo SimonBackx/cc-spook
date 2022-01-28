@@ -1,7 +1,7 @@
 @use "../base/text-styles.scss" as *;
 
 #post {
-    padding: 20px 0;
+    padding: 40px 0;
 
     > h1 {
         @extend .style-h1;
