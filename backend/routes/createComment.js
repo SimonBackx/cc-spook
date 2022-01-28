@@ -1,5 +1,5 @@
 const ClientError = require('../errors/ClientError');
-const Comment = require('../models/comment');
+const Comment = require('../models/Comment');
 
 // Note that we use Express v5, so that async errors will get caught and returned as an error
 module.exports = async function(req, res) {

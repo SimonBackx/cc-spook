@@ -1,6 +1,6 @@
 const app = require('../server');
 const request = require('supertest');
-const Comment = require('../models/comment');
+const Comment = require('../models/Comment');
 const User = require('../models/User');
 
 let user, comment;

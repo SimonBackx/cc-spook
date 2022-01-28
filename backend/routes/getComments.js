@@ -1,4 +1,4 @@
-const Comment = require('../models/comment');
+const Comment = require('../models/Comment');
 
 module.exports = async function(req, res) {
     // Get all comments and votes (if signed in)
