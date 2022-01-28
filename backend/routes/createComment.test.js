@@ -9,7 +9,7 @@ describe("Create comment", () => {
         await user.save()
     })
 
-    test("Create a valid comment", async () => {
+    test("create a valid comment", async () => {
         const message = "This is a valid comment";
         const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send({ message })
         
@@ -18,6 +18,21 @@ describe("Create comment", () => {
         expect(response.body.created_at).toEqual(expect.any(String));
         expect(response.body.updated_at).toEqual(expect.any(String));
         expect(response.body.user_id).toEqual(expect.any(Number));
+    });
+
+    test("authentication is required", async () => {
+        const response = await request(app).post('/comments').send({ message: 123 })
+        expect(response.status).toEqual(401);
+    });
+
+    test("valid user is required", async () => {
+        const response = await request(app).post('/comments').set("Authorization", "USER_ID 989895959").send({ message: 123 })
+        expect(response.status).toEqual(401);
+    });
+
+    test("valid Authorization header is required", async () => {
+        const response = await request(app).post('/comments').set("Authorization", "Bearer invalid").send({ message: 123 })
+        expect(response.status).toEqual(401);
     });
 
     test("can't create empty comment", async () => {
