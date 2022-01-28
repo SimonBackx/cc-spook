@@ -3,7 +3,7 @@ const Comment = require('../models/comment');
 
 // Note that we use Express v5, so that async errors will get caught and returned as an error
 module.exports = async function(req, res) {
-    if (!req.body.message || req.body.message.length < 1) {
+    if (!req.body.message || req.body.message.length < 1 || typeof req.body.message !== 'string') {
         throw new ClientError("Invalid message")
     }
     const comment = new Comment({
