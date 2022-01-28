@@ -1,5 +1,12 @@
 {
   "name": "@cc-spook/frontend",
   "version": "1.0.0",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build:sass": "sass scss/index.scss dist/css/index.css --style compressed",
+    "build": "yarn build:sass"
+  },
+  "devDependencies": {
+    "sass": "^1.49.0"
+  }
 }
