@@ -11,6 +11,9 @@
         <link rel="preconnect" href="https://fonts.googleapis.com"> 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script defer src="/main.js" type="module"></script>
     </head>
     <body>
         <main id="page-container">
@@ -26,33 +29,35 @@
             <section id="comments">
                 <h2>Discussion</h2>
                 <!-- Here we'll place our comments and form -->
-                <form>
+                <form id="comment-form">
                     <figure class="avatar">
                         <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar">
                     </figure>
-                    <textarea name="message" placeholder="What are your thoughts?"></textarea>
+                    <textarea id="comment-message" name="message" placeholder="What are your thoughts?"></textarea>
                     <button type="submit" class="button primary">Comment</button>
                 </form>
 
                 <hr class="style-hr">
 
-                <div class="box">
-                    <article class="comment">
-                        <figure class="avatar">
-                            <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar">
-                        </figure>
-                        <main>
-                            <header>
-                                <h3>Author name</h3>
-                                <time>15 minutes ago</time>
-                            </header>
-                            <p>Jeepers now that's a huge release with some big community earnings to back it - it must be so rewarding seeing creators quit their day jobs after monetizing (with real MRR) on the new platform.</p>
-                            <footer>
-                                <button type="button" class="button secundary"><span class="icon arrow-up"></span><span>Upvote</span></button>
-                                <button type="button" class="button secundary">Reply</button>
-                            </footer>
-                        </main>
-                    </article>
+                <div id="comments-box">
+                    <template id="comment-template">
+                        <article class="comment">
+                            <figure class="avatar">
+                                <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar">
+                            </figure>
+                            <main>
+                                <header>
+                                    <h3>Author name</h3>
+                                    <time>15 minutes ago</time>
+                                </header>
+                                <p>Jeepers now that's a huge release with some big community earnings to back it - it must be so rewarding seeing creators quit their day jobs after monetizing (with real MRR) on the new platform.</p>
+                                <footer>
+                                    <button type="button" class="button secundary"><span class="icon arrow-up"></span><span>Upvote</span></button>
+                                    <button type="button" class="button secundary">Reply</button>
+                                </footer>
+                            </main>
+                        </article>
+                    </template>
                 </div>
             </section>
         </main>
