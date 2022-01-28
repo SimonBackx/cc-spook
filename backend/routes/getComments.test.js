@@ -2,8 +2,11 @@ const app = require('../server');
 const request = require('supertest');
 const User = require('../models/User');
 const Comment = require('../models/Comment');
+const Vote = require('../models/Vote');
 
 let user;
+let comment;
+
 describe("Get comments", () => {
     beforeAll(async () => {
         user = new User({ name: "Test user" })
@@ -21,7 +24,7 @@ describe("Get comments", () => {
 
     test("get comments, unauthenticated", async () => {
         // Create a comment
-        const comment = new Comment({ message: "Hello world", user_id: user.id })
+        comment = new Comment({ message: "Hello world", user_id: user.id })
         await comment.save()
 
         // Check if we get this comment
@@ -30,5 +33,27 @@ describe("Get comments", () => {
         expect(response.status).toEqual(200);
         expect(response.body.comments).toEqual([comment.toJSON()]);
         expect(response.body.votes).toEqual([]);
+    });
+
+    test("get comments, authenticated, without votes", async () => {
+        // Check if we get this comment
+        const response = await request(app).get('/comments').set("Authorization", "USER_ID "+user.id).send()
+        
+        expect(response.status).toEqual(200);
+        expect(response.body.comments).toEqual([comment.toJSON()]);
+        expect(response.body.votes).toEqual([]);
+    });
+
+    test("get comments, authenticated, with votes", async () => {
+        // Create vote
+        vote = new Vote({ comment_id: comment.id, user_id: user.id })
+        await vote.save()
+
+        // Check if we get this comment
+        const response = await request(app).get('/comments').set("Authorization", "USER_ID "+user.id).send()
+        
+        expect(response.status).toEqual(200);
+        expect(response.body.comments).toEqual([comment.toJSON()]);
+        expect(response.body.votes).toEqual([vote.toJSON()]);
     });
 })

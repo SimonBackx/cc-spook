@@ -2,5 +2,9 @@ const bookshelf = require('./bookshelf');
 
 // Defining models
 module.exports = bookshelf.model('User', {
-    tableName: 'users'
+    tableName: 'users',
+
+    votes() {
+        return this.hasMany('Vote')
+    }
 })

@@ -3,18 +3,15 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-    return knex.schema.createTable('comments', function(table) {
+    return knex.schema.createTable('votes', function(table) {
         table.increments('id').primary()
-        table.text('message').notNullable()
-
-        // Cached vote count
-        table.integer('votes').unsigned().notNullable().defaultTo(0)
 
         table.integer('user_id').unsigned().notNullable().references('users.id')
+        table.integer('comment_id').unsigned().notNullable().references('comments.id')
         table.timestamps(true, true)
 
-        // We'll need to sort on created_at often (new to old)
-        table.index('created_at')
+        // A user can only vote once on the same comment
+        table.unique(['user_id', 'comment_id']);
     })
 };
 
