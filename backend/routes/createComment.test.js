@@ -11,3 +11,8 @@ test("Create a valid comment", async () => {
     expect(response.body.updated_at).toEqual(expect.any(String));
     expect(response.body.user_id).toEqual(expect.any(Number));
 });
+
+test("can't create empty comment", async () => {
+    const response = await request(app).post('/comments').send({ message: "" })
+    expect(response.status).toEqual(400);
+});
