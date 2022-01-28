@@ -24,7 +24,7 @@ describe("Undo upvote", () => {
     })
 
     test("undo upvote", async () => {
-        const response = await request(app).post('/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).post('/api/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user.id).send()
        
         expect(response.status).toEqual(201);
 
@@ -34,7 +34,7 @@ describe("Undo upvote", () => {
     });
 
     test("undo non-existing upvote", async () => {
-        const response = await request(app).post('/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).post('/api/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user.id).send()
        
         expect(response.status).toEqual(201);
 
@@ -44,7 +44,7 @@ describe("Undo upvote", () => {
     });
 
     test("undo last upvote", async () => {
-        const response = await request(app).post('/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user2.id).send()
+        const response = await request(app).post('/api/upvote/'+comment.id+"/undo").set("Authorization", "USER_ID "+user2.id).send()
        
         expect(response.status).toEqual(201);
 

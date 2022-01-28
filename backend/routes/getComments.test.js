@@ -18,7 +18,7 @@ describe("Get comments", () => {
 
     // Since we clear the database on every test file run, we know that comments should be empty
     test("get empty comments, unauthenticated", async () => {
-        const response = await request(app).get('/comments').send()
+        const response = await request(app).get('/api/comments').send()
         
         expect(response.status).toEqual(200);
         expect(response.body.comments).toEqual([]);
@@ -31,7 +31,7 @@ describe("Get comments", () => {
         await comment.save()
 
         // Check if we get this comment
-        const response = await request(app).get('/comments').set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).get('/api/comments').set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
         expect(response.body.comments).toEqual([comment.toJSON()]);
@@ -47,7 +47,7 @@ describe("Get comments", () => {
         await otherVote.save()
 
         // Check if we get this comment
-        const response = await request(app).get('/comments').set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).get('/api/comments').set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
         expect(response.body.comments).toEqual([comment.toJSON()]);
@@ -58,7 +58,7 @@ describe("Get comments", () => {
         // Votes should stay empty
 
         // Check if we get this comment
-        const response = await request(app).get('/comments').send()
+        const response = await request(app).get('/api/comments').send()
         
         expect(response.status).toEqual(200);
         expect(response.body.comments).toEqual([comment.toJSON()]);

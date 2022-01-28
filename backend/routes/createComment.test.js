@@ -11,7 +11,7 @@ describe("Create comment", () => {
 
     test("create a valid comment", async () => {
         const message = "This is a valid comment";
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send({ message })
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID "+user.id).send({ message })
         
         expect(response.status).toEqual(200);
         expect(response.body.message).toEqual(message);
@@ -21,37 +21,37 @@ describe("Create comment", () => {
     });
 
     test("authentication is required", async () => {
-        const response = await request(app).post('/comments').send({ message: 123 })
+        const response = await request(app).post('/api/comments').send({ message: 123 })
         expect(response.status).toEqual(401);
     });
 
     test("valid user is required", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID 989895959").send({ message: 123 })
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID 989895959").send({ message: 123 })
         expect(response.status).toEqual(401);
     });
 
     test("valid Authorization header is required", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "Bearer invalid").send({ message: 123 })
+        const response = await request(app).post('/api/comments').set("Authorization", "Bearer invalid").send({ message: 123 })
         expect(response.status).toEqual(401);
     });
 
     test("can't create empty comment", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send({ message: "" })
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID "+user.id).send({ message: "" })
         expect(response.status).toEqual(400);
     });
 
     test("throw error for invalid body", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID "+user.id).send()
         expect(response.status).toEqual(400);
     });
 
     test("throw error for null message", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send({ message: null })
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID "+user.id).send({ message: null })
         expect(response.status).toEqual(400);
     });
 
     test("throw error for non string message", async () => {
-        const response = await request(app).post('/comments').set("Authorization", "USER_ID "+user.id).send({ message: 123 })
+        const response = await request(app).post('/api/comments').set("Authorization", "USER_ID "+user.id).send({ message: 123 })
         expect(response.status).toEqual(400);
     });
 })

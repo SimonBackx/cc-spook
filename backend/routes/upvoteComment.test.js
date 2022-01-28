@@ -15,7 +15,7 @@ describe("Upvote comment", () => {
     })
 
     test("upvote a comment", async () => {
-        const response = await request(app).post('/upvote/'+comment.id).set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).post('/api/upvote/'+comment.id).set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
         expect(response.body.id).toBeDefined();
@@ -28,7 +28,7 @@ describe("Upvote comment", () => {
     });
 
     test("fail silently if upvoted twice", async () => {
-        const response = await request(app).post('/upvote/'+comment.id).set("Authorization", "USER_ID "+user.id).send()
+        const response = await request(app).post('/api/upvote/'+comment.id).set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
         expect(response.body.id).toBeDefined();
