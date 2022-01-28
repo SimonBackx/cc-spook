@@ -9,14 +9,13 @@ async function migrateDatabase() {
     }
   }
 
-(async function() {
-    try {
-        await migrateDatabase()
-    } catch (error) {
-        console.log(error)
-        process.exit(1)
-    }
-})()
+
+// We need to migrate the database on every test file,
+// which is not super clean, but since we are using an in memory database this is easier for running the tests
+// than setting up a separate MySQL database that is shared between the tests.
+beforeAll(async () => {
+  await migrateDatabase()
+});
 
 // Close database connection after running tests
 afterAll(async () => {
