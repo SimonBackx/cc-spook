@@ -7,7 +7,7 @@ const ClientError = require("../errors/ClientError")
  * 
  * You can make authentication required or optional by setting the required property of the options object
  * @param {Object} options
- * @param {Object} options.required
+ * @param {boolean} options.required
  */
 module.exports = function({ required } = { required: true }) {
     return async function (req, res, next) {
