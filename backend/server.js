@@ -8,7 +8,7 @@ app.use(bodyParser.json())
 
 // Temporary authentication middleware
 const auth = require('./middleware/auth')
-app.use(auth)
+app.use(auth({ required: true }))
 
 // Load routes
 const getComments = require('./routes/getComments')
