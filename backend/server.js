@@ -6,16 +6,15 @@ const app = express()
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
-// Temporary authentication middleware
+// Authentication middleware
 const auth = require('./middleware/auth')
-app.use(auth({ required: true }))
 
 // Load routes
 const getComments = require('./routes/getComments')
 const createComment = require('./routes/createComment')
 
-app.get('/comments', getComments)
-app.post('/comments', createComment)
+app.get('/comments', auth({ required: false}), getComments)
+app.post('/comments', auth({ required: true}), createComment)
 
 // Express error handler should be last one
 const errorHandler = require('./middleware/errorHandler')
