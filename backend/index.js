@@ -1,7 +1,7 @@
 // Load environment variables from .env file
 require('dotenv').config()
 
-// Start server
+// Init server
 const express = require('express')
 const app = express()
 const port = process.env.PORT
@@ -10,10 +10,11 @@ if (!port) {
     throw new Error("Missing PORT environment variable")
 }
 
-app.get('/', (req, res) => {
-    res.send('Hello World')
-})
+// Load routes
+const createComment = require('./src/routes/createComment')
+app.post('/comment', createComment)
 
+// Start server
 app.listen(port, () => {
     console.log(`Listening on port ${port}`)
 })
