@@ -4,10 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "migrate:make": "knex migrate:make",
+    "migrate": "knex migrate:latest",
     "start": "node index.js"
   },
   "dependencies": {
+    "bookshelf": "^1.2.0",
     "dotenv": "^14.3.2",
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "knex": "^1.0.1",
+    "mysql": "^2.18.1"
   }
 }

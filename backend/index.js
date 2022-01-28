@@ -11,8 +11,10 @@ if (!port) {
 }
 
 // Load routes
-const createComment = require('./src/routes/createComment')
-app.post('/comment', createComment)
+const getComments = require('./routes/getComments')
+const createComment = require('./routes/createComment')
+app.get('/comments', getComments)
+app.post('/comments', createComment)
 
 // Start server
 app.listen(port, () => {
