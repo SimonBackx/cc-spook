@@ -1,7 +1,12 @@
 @use "./variables.scss" as *;
 
+.style-h1 {
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 1.2;
+}
+
 .style-h2 {
-    font-family: Inter;
     font-weight: bold;
     font-size: 18px;
     line-height: 1.2;
@@ -9,8 +14,28 @@
 
 .style-h3 {
     font-size: 13px;
-    font-family: Inter;
     font-style: normal;
     font-weight: 600;
     line-height: 1.2;
+}
+
+.style-hr {
+    height: 1px;
+    background: $color-border;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    margin: 20px 0;
+}
+
+// Large, important text (e.g. blog content)
+.style-text-large {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+// Smaller, less important text
+.style-text {
+    font-size: 13px;
+    line-height: 1.5;
 }

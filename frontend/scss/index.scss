@@ -1,3 +1,6 @@
 @use "./base/reset.scss";
 @use "./elements/body.scss";
+
 @use "./components/page.scss";
+@use "./components/post.scss";
+@use "./components/comments.scss";

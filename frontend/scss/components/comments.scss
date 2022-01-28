@@ -1,0 +1,12 @@
+@use "../base/text-styles.scss" as *;
+
+#comments {
+    padding: 20px 0;
+
+    > h2 {
+        @extend .style-h2;
+        padding-bottom: 20px;
+    }
+
+    
+}
