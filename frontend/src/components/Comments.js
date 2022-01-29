@@ -13,6 +13,8 @@ class Comments extends React.Component {
             comments: [],
             votes: []
         };
+
+        this.addComment = this.addComment.bind(this);
     }
 
     async loadComments() {
@@ -24,6 +26,10 @@ class Comments extends React.Component {
         this.setState(response.data)
     }
 
+    addComment(comment) {
+        this.setState({ comments: [comment, ...this.state.comments] })
+    }
+
     componentDidMount() {
         this.loadComments().catch(console.error)
     }
@@ -32,7 +38,7 @@ class Comments extends React.Component {
         return (
             <section id="comments">
                 <h2>Discussion</h2>
-                <CommentForm />
+                <CommentForm addComment={this.addComment} />
     
                 <hr className="style-hr" />
     
