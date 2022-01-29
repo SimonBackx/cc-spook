@@ -11,21 +11,10 @@ Note that I decided to not use yarn workspaces because that might be too depende
 - Yarn
 - A MySQL server locally (or easily accessible without SSL), with a clean database
 
-### In one go
-
-```
-cd backend
-yarn install
-cd ../frontend
-yarn install
-cd ..
-```
-
-
 ### Step by step
 
 1. Make sure you install the dependencies in both packages using yarn:
-```
+```bash
 cd backend
 yarn install
 cd ../frontend
@@ -34,7 +23,7 @@ cd ..
 ```
 
 2. Compile the SCSS code in the frontend package.
-```
+```bash
 cd frontend
 yarn build
 cd ..
@@ -42,7 +31,7 @@ cd ..
 
 3. Create a file `.env` in the `/backend` folder, with the following contents, and fill in the credentials for your database.
 
-```
+```bash
 PORT=7777
 DB_HOST=127.0.0.1
 DB_USER=root
@@ -51,13 +40,13 @@ DB_DATABASE=cc-spook
 ```
 
 4. Run the migrations
-```
+```bash
 cd backend
 yarn migrate
 ```
 
 5. Start the server
-```
+```bash
 cd backend
 yarn start
 ```
@@ -68,7 +57,7 @@ yarn start
 
 Currently we only have tests for the backend api.
 
-```
+```bash
 cd backend
 yarn test
 ```
