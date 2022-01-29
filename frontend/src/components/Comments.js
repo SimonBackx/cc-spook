@@ -15,6 +15,11 @@ class Comments extends React.Component {
         };
 
         this.addComment = this.addComment.bind(this);
+        this.setVotes = this.setVotes.bind(this);
+    }
+
+    componentDidMount() {
+        this.loadComments().catch(console.error)
     }
 
     async loadComments() {
@@ -30,8 +35,24 @@ class Comments extends React.Component {
         this.setState({ comments: [comment, ...this.state.comments] })
     }
 
-    componentDidMount() {
-        this.loadComments().catch(console.error)
+    setVotes(comment, votes) {
+        this.setState({
+            comments: this.state.comments.map(c => c.id === comment.id ? { ...c, votes } : c)
+        })
+    }
+
+    removeVote(comment) {
+        this.setVotes(comment, comment.votes - 1)
+        this.setState({
+            votes: this.state.votes.filter(vote => vote.comment_id !== comment.id)
+        })
+    }
+
+    addVote(comment, vote) {
+        this.setVotes(comment, comment.votes + 1)
+        this.setState({
+            votes: [...this.state.votes, vote]
+        })
     }
 
     render() {
@@ -50,7 +71,7 @@ class Comments extends React.Component {
                             </div>
                         )
                     }
-                    { this.state.comments.map(comment => <Comment comment={comment} key={comment.id} />) }
+                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} addVote={(vote) => this.addVote(comment, vote)} removeVote={() => this.removeVote(comment)}/>) }
                 </div>
             </section>
         );

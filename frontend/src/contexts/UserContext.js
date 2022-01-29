@@ -87,6 +87,7 @@ const UserProvider = ({ children }) => {
             _pendingSignIn = null
             return result
         }
+        return user
     }
 
 
@@ -101,20 +102,19 @@ const UserProvider = ({ children }) => {
         })
         setUser(response.data)
         save(response.data)
+        return response.data
     }
 
 
     async function getAuthHeaders() {
-        await signInIfNeeded()
+        const user = await signInIfNeeded()
         return {
             "Authorization": "USER_ID "+user.id
         }
     }
 
-    // Sign in right away if needed
-    useEffect(() => {
-        signInIfNeeded().catch(console.error);
-    });
+    signInIfNeeded().catch(console.error);
+
  
     return (
         <UserContext.Provider value={{ user, setUser, getAuthHeaders }}>
