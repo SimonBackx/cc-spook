@@ -10,8 +10,11 @@ module.exports = async function(req, res) {
         votes = await req.user.votes().fetch()
     }
 
+    // Load comment users
+    await comments.load('user')
+
     res.json({
-        comments,
+        comments: comments,
         votes
     })
 }

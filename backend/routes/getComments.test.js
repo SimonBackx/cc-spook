@@ -5,7 +5,7 @@ const Comment = require('../models/Comment');
 const Vote = require('../models/Vote');
 
 let user, otherUser;
-let comment;
+let comment, commentEncoded;
 
 describe("Get comments", () => {
     beforeAll(async () => {
@@ -29,12 +29,26 @@ describe("Get comments", () => {
         // Create a comment
         comment = new Comment({ message: "Hello world", user_id: user.id })
         await comment.save()
+        
+        // Expected encoded value for comment
+        commentEncoded = {
+            id: expect.any(Number),
+            message: "Hello world",
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            user_id: user.id,
+            votes: 0,
+            user: {
+                id: user.id,
+                name: "Test user"
+            }
+        };
 
         // Check if we get this comment
         const response = await request(app).get('/api/comments').set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
-        expect(response.body.comments).toEqual([comment.toJSON()]);
+        expect(response.body.comments).toEqual([commentEncoded]);
         expect(response.body.votes).toEqual([]);
     });
 
@@ -50,7 +64,7 @@ describe("Get comments", () => {
         const response = await request(app).get('/api/comments').set("Authorization", "USER_ID "+user.id).send()
         
         expect(response.status).toEqual(200);
-        expect(response.body.comments).toEqual([comment.toJSON()]);
+        expect(response.body.comments).toEqual([commentEncoded]);
         expect(response.body.votes).toEqual([vote.toJSON()]);
     });
 
@@ -61,7 +75,7 @@ describe("Get comments", () => {
         const response = await request(app).get('/api/comments').send()
         
         expect(response.status).toEqual(200);
-        expect(response.body.comments).toEqual([comment.toJSON()]);
+        expect(response.body.comments).toEqual([commentEncoded]);
         expect(response.body.votes).toEqual([]);
     });
 })

@@ -12,5 +12,10 @@ module.exports = async function(req, res) {
     })
 
     await comment.save()
+
+    // Manually set user relation
+    // Couldn't find an official way to do this in the documentation of bookshelf
+    comment.relations.user = req.user
+
     res.status(200).json(comment)
 }

@@ -17,7 +17,9 @@ describe("Create comment", () => {
         expect(response.body.message).toEqual(message);
         expect(response.body.created_at).toEqual(expect.any(String));
         expect(response.body.updated_at).toEqual(expect.any(String));
-        expect(response.body.user_id).toEqual(expect.any(Number));
+        expect(response.body.user_id).toEqual(user.id);
+        expect(response.body.user.name).toEqual("Test user");
+        expect(response.body.user.id).toEqual(user.id);
     });
 
     test("authentication is required", async () => {
