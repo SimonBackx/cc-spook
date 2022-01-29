@@ -11,6 +11,12 @@ function createCommentElement(comment) {
     // Set time string
     // Set message
 
+    //clone.querySelector('h3').textContent = comment.user.name
+    clone.querySelector('p').textContent = comment.message
+    clone.querySelector('time').textContent = comment.created_at
+    clone.querySelector('h3').textContent = comment.user.name
+    clone.querySelector('img').src = comment.user.avatar
+
     return clone
 }
 
@@ -25,41 +31,30 @@ async function fetchComments() {
     }
 }
 
-let user;
-
-async function signIn(name = "My Demo") {
-    const response = await axios({
-        method: "post",
-        url: '/api/sign-in', 
-        data: { name }
-    })
-    window.user = response.data
-
-}
-
 async function placeComment(message) {
-    if (!window.user) {
-        await signIn()
+    try {
+        const response = await axios({
+            method: "post",
+            url: '/api/comments', 
+            data: { message },
+            headers: await Session.shared.getAuthHeaders()
+        })
+    
+        const comment = response.data
+    
+        // Insert at the top (will get moved to the correct position the next reload, but this has a better UX)
+        const element = createCommentElement(comment)
+        document.querySelector('#comments-box').prepend(element)
+    } catch (e) {
+        console.error(e)
     }
-    const response = await axios({
-        method: "post",
-        url: '/api/comments', 
-        data: { message },
-        headers: {
-            "Authorization": "USER_ID "+window.user.id
-        }
-    })
-
-    const comment = response.data
-
-    // Insert at the top (will get moved to the correct position the next reload, but this has a better UX)
-    const element = createCommentElement(comment)
-    document.querySelector('#comments-box').prepend(element)
+    
 }
 
 // On start
 fetchComments().catch(console.error)
 
+// Submit comment handler
 document.getElementById("comment-form").addEventListener("submit", (event) => {
     event.preventDefault()
 

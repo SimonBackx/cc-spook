@@ -13,7 +13,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
         <script defer src="https://unpkg.com/axios/dist/axios.min.js"></script>
-        <script defer src="/main.js" type="module"></script>
+        <script defer src="/Session.js"></script>
+        <script defer src="/main.js"></script>
     </head>
     <body>
         <main id="page-container">
@@ -31,7 +32,7 @@
                 <!-- Here we'll place our comments and form -->
                 <form id="comment-form">
                     <figure class="avatar">
-                        <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar">
+                        <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar" id="current-avatar">
                     </figure>
                     <textarea id="comment-message" name="message" placeholder="What are your thoughts?"></textarea>
                     <button type="submit" class="button primary">Comment</button>
