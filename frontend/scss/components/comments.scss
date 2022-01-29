@@ -21,6 +21,10 @@
         }
     }
 
+    #warning {
+        @extend .style-h3;
+    }
+
     > form {
         display: flex;
         flex-direction: row;

@@ -14,10 +14,18 @@ function createCommentElement(comment) {
     return clone
 }
 
+function hideWarning() {
+    document.querySelector('#warning').style.display = 'none'
+}
+
 async function fetchComments() {
     const response = await axios.get('/api/comments')
 
     const comments = response.data.comments
+
+    if (comments.length > 0) {
+        hideWarning()
+    }
 
     for (const comment of comments) {
         const element = createCommentElement(comment)
@@ -38,6 +46,7 @@ async function placeComment(message) {
     
         // Insert at the top (will get moved to the correct position the next reload, but this has a better UX)
         const element = createCommentElement(comment)
+        hideWarning()
         document.querySelector('#comments-box').prepend(element)
     } catch (e) {
         console.error(e)
