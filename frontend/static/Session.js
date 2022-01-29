@@ -8,6 +8,26 @@ class Session {
     constructor() {
         this.restore()
         this.signInIfNeeded().catch(console.error)
+
+        // Intercept auth errors (e.g. when a user is signed out automatically -> removed in database)
+        axios.interceptors.response.use(response => response, error => {
+            if (error.response && error.response.status === 401 && !error.config._didRetry) {
+                console.error("User is signed out")
+
+                // Retry
+                this.user = null;
+                return this.getAuthHeaders().then((headers) => {
+                    if (!this.user) {
+                        throw new Error("Failed to sign in");
+                    }
+                    const config = error.config;
+                    config._didRetry = true;
+                    config.headers = headers;
+                    return axios(config);
+                })
+            }
+            return error;
+        });
     }
 
     async signInIfNeeded() {

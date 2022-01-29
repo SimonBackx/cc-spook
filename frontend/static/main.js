@@ -58,7 +58,6 @@ async function fetchComments() {
         url: '/api/comments',
         headers: await Session.shared.getAuthHeaders()
     })
-
     const comments = response.data.comments
 
     if (comments.length > 0) {
