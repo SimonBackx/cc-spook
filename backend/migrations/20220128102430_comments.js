@@ -19,7 +19,7 @@ exports.up = function(knex) {
         table.integer('user_id').unsigned().notNullable().references('users.id')
         table.timestamps(true, true)
 
-        // We'll need to sort on created_at often (new to old)
+        // We'll need to sort on created_at often (old to new)
         table.index('created_at')
     })
 };

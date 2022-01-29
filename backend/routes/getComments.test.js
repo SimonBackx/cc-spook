@@ -79,4 +79,50 @@ describe("Get comments", () => {
         expect(response.body.comments).toEqual([commentEncoded]);
         expect(response.body.votes).toEqual([]);
     });
+
+    test("get sorted comments", async () => {
+        // Create two new comments, one that should be before the existing and one that should be after (to test the sorting correctly and prevent default sorting by id)
+        const comment2 = new Comment({ message: "Hello world2", user_id: user.id, created_at: new Date(2000, 0, 1).toISOString() })
+        await comment2.save()
+
+        const comment3 = new Comment({ message: "Hello world3", user_id: user.id })
+        await comment3.save()
+        
+        // Expected encoded value for comment
+        const comment2Encoded = {
+            id: expect.any(Number),
+            message: "Hello world2",
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            user_id: user.id,
+            votes: 0,
+            user: {
+                id: user.id,
+                name: "Test user",
+                avatar: "/images/avatar1.jpg"
+            }
+        };
+
+        // Expected encoded value for comment
+        const comment3Encoded = {
+            id: expect.any(Number),
+            message: "Hello world3",
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            user_id: user.id,
+            votes: 0,
+            user: {
+                id: user.id,
+                name: "Test user",
+                avatar: "/images/avatar1.jpg"
+            }
+        };
+
+        // Check if we get this comment
+        const response = await request(app).get('/api/comments').send()
+        
+        expect(response.status).toEqual(200);
+        expect(response.body.comments).toEqual([comment2Encoded, commentEncoded, comment3Encoded]);
+        expect(response.body.votes).toEqual([]);
+    });
 })

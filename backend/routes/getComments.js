@@ -2,7 +2,7 @@ const Comment = require('../models/Comment');
 
 module.exports = async function(req, res) {
     // Get all comments and votes (if signed in)
-    const comments = await Comment.fetchAll()
+    const comments = await new Comment().orderBy('created_at', 'asc').fetchAll()
     let votes = []
 
     if (req.user) {
