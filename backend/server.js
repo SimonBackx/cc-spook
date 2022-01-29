@@ -29,8 +29,7 @@ app.use('/api', api)
 // These could also get hosted on a different server, but for simplicity we'll host them on the
 // same server as the API, also to avoid having to set CORS headers on the API.
 const staticRouter = express.Router()
-staticRouter.use(express.static('../frontend/static'))
-staticRouter.use(express.static('../frontend/dist'))
+staticRouter.use(express.static('../frontend/build'))
 
 app.use(staticRouter)
 
