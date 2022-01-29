@@ -7,7 +7,7 @@ function createCommentElement(comment) {
     const clone = template.content.cloneNode(true);
 
     clone.querySelector('p').textContent = comment.message
-    clone.querySelector('time').textContent = comment.created_at
+    clone.querySelector('time').textContent = Formatter.relativeTime(comment.created_at)
     clone.querySelector('h3').textContent = comment.user.name
     clone.querySelector('img').src = comment.user.avatar
 
