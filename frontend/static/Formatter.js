@@ -16,6 +16,9 @@ class Formatter {
         // Diff in minutes
         diff = diff / 60;
         if (diff < 60) {
+            if (Math.floor(diff) == 1) {
+                return `One minute ago`;
+            }
             return `${Math.floor(diff)} minutes ago`;
         }
 
@@ -29,17 +32,28 @@ class Formatter {
         // Diff in hours
         diff = diff / 60;
         if (diff < 24) {
+            if (Math.floor(diff) == 1) {
+                return `One hour ago`;
+            }
             return `${Math.floor(diff)} hours ago`;
         }
 
         // Diff in days
         diff = diff / 24;
         if (diff < 7) {
+            if (Math.floor(diff) == 1) {
+                // Special case, we should compare based on dates in the future instead
+                return `One day ago`;
+            }
             return `${Math.floor(diff)} days ago`;
         }
 
         // Diff in weeks
         diff = diff / 7;
+        if (Math.floor(diff) == 1) {
+            // Special case, we should compare based on dates in the future instead
+            return `One week ago`;
+        }
         return `${Math.floor(diff)} weeks ago`;
     }
 }
