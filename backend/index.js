@@ -10,6 +10,10 @@ if (!port) {
 const app = require('./server')
 
 // Start server
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Listening on port ${port}`)
+
+    // Init websocket server
 })
+
+require('./websocketServer').init(server)
