@@ -102,6 +102,22 @@
             flex-direction: row;
             flex-wrap: wrap;
             gap: 30px;
+
+            .button {
+                transition: color 0.2s;
+
+                > .icon {
+                    transition: transform 0.15s;
+                }
+
+                &.voted {
+                    color: $color-primary;
+    
+                    > .icon {
+                        transform: scale(1.4, 1.4);
+                    }
+                }
+            }
         }
     }
 

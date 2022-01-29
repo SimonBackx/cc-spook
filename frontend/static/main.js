@@ -1,4 +1,4 @@
-function createCommentElement(comment) {
+function createCommentElement(comment, didVote = false) {
     const template = document.querySelector('#comment-template');
     if (!template) {
         throw new Error("Missing template")
@@ -10,6 +10,40 @@ function createCommentElement(comment) {
     clone.querySelector('time').textContent = Formatter.relativeTime(comment.created_at)
     clone.querySelector('h3').textContent = comment.user.name
     clone.querySelector('img').src = comment.user.avatar
+
+    function updateVotes() {
+        if (comment.votes > 0) {
+            upvoteButton.querySelector("span:last-child").textContent = `Upvote (${comment.votes})`
+        }
+
+        if (didVote) {
+            upvoteButton.classList.add("voted")
+        } else {
+            upvoteButton.classList.remove("voted")
+        }
+    }
+
+    const upvoteButton = clone.querySelector("[data-button-upvote]")
+    updateVotes()
+
+    upvoteButton.addEventListener("click", () => {
+        if (didVote) {
+            // Remove vote
+            undoUpvoteComment(comment).then(() => {
+                didVote = false
+                updateVotes()
+            })
+        } else {
+            upvoteComment(comment).then(() => {
+                didVote = true
+                updateVotes()
+            })
+        }
+    })
+
+    clone.querySelector("[data-button-reply]").addEventListener("click", () => {
+        alert("Reply functionality not implemented yet.")
+    })
 
     return clone
 }
@@ -52,6 +86,34 @@ async function placeComment(message) {
         console.error(e)
     }
     
+}
+
+async function upvoteComment(comment) {
+    try {
+        await axios({
+            method: "post",
+            url: '/api/upvote/'+comment.id, 
+            headers: await Session.shared.getAuthHeaders()
+        })
+
+        comment.votes += 1
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+async function undoUpvoteComment(comment) {
+    try {
+        await axios({
+            method: "post",
+            url: '/api/upvote/'+comment.id+'/undo', 
+            headers: await Session.shared.getAuthHeaders()
+        })
+
+        comment.votes -= 1
+    } catch (e) {
+        console.error(e)
+    }
 }
 
 // On start
