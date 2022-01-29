@@ -2,13 +2,44 @@ class Session {
     static shared = new Session();
     user = null;
 
+    /** Keep track of pending sign in promise to prevent multiple sign ins */ 
+    _pendingSignIn = null;
+
     constructor() {
+        this.restore()
         this.signInIfNeeded().catch(console.error)
     }
 
     async signInIfNeeded() {
         if (!this.user) {
-            await this.signIn()
+            this._pendingSignIn = this._pendingSignIn ?? this.signIn()
+            const result = await this._pendingSignIn
+            this._pendingSignIn = null
+            return result
+        }
+    }
+
+    save() {
+        try {
+            sessionStorage.setItem('user', JSON.stringify(this.user))
+        } catch (e) {
+            // Session storage not supported or enabled
+            console.error("Failed to save session", e)
+        }
+    }
+
+    restore() {
+        try {
+            const json = sessionStorage.getItem('user')
+            if (json) {
+                const user = JSON.parse(json)
+                if (user && user.name && user.avatar && user.id) {
+                    this.setUser(user)
+                }
+            }
+        } catch (e) {
+            // Session storage not supported or enabled
+            console.error("Failed to restore session", e)
         }
     }
 
@@ -21,10 +52,15 @@ class Session {
             url: '/api/sign-in', 
             data: userData
         })
-        this.user = response.data
-    
+        this.setUser(response.data)
+        this.save()
+    }
+
+    setUser(user) {
+        this.user = user
         // Update the avatar
-        document.querySelector('#current-avatar').src = userData.avatar
+
+        document.querySelector('#current-avatar').src = this.user.avatar
     }
     
     chooseRandomUserData() {

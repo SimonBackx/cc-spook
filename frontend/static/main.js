@@ -53,7 +53,11 @@ function hideWarning() {
 }
 
 async function fetchComments() {
-    const response = await axios.get('/api/comments')
+    const response = await axios({
+        method: "get",
+        url: '/api/comments',
+        headers: await Session.shared.getAuthHeaders()
+    })
 
     const comments = response.data.comments
 
@@ -62,7 +66,8 @@ async function fetchComments() {
     }
 
     for (const comment of comments) {
-        const element = createCommentElement(comment)
+        const didVote = response.data.votes.find(v => v.comment_id === comment.id)
+        const element = createCommentElement(comment, didVote)
         document.querySelector('#comments-box').appendChild(element)
     }
 }
