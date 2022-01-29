@@ -6,12 +6,6 @@ function createCommentElement(comment) {
 
     const clone = template.content.cloneNode(true);
 
-    // Set avatar (todo)
-    // Set author name
-    // Set time string
-    // Set message
-
-    //clone.querySelector('h3').textContent = comment.user.name
     clone.querySelector('p').textContent = comment.message
     clone.querySelector('time').textContent = comment.created_at
     clone.querySelector('h3').textContent = comment.user.name
