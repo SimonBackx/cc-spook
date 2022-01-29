@@ -94,6 +94,7 @@
 
         > main > p {
             @extend .style-text;
+            white-space: pre-wrap;
         }
 
         footer {
