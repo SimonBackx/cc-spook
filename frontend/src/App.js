@@ -1,9 +1,11 @@
+import Post from './components/Post';
+
 function App() {
-  return (
-    <div className="App">
-      Work in progress
-    </div>
-  );
+    return (
+        <main id="page-container">
+            <Post />
+        </main>
+    );
 }
 
 export default App;
