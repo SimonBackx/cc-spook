@@ -69,8 +69,8 @@ function Comment(props) {
                 </header>
                 <p>{props.comment.message}</p>
                 <footer>
-                    <button type="button" className="button secundary" data-button-upvote><span className="icon arrow-up"></span><span>Upvote ({props.comment.votes})</span></button>
-                    <button type="button" className="button secundary" data-button-reply>Reply</button>
+                    <button type="button" className="button secundary"><span className="icon arrow-up"></span><span>Upvote ({props.comment.votes})</span></button>
+                    <button type="button" className="button secundary">Reply</button>
                 </footer>
             </main>
         </article>

@@ -1,38 +1,38 @@
 import React from 'react';
 import Comment from './Comment';
+import CommentForm from './CommentForm';
+import { UserContext } from '../contexts/UserContext';
+import axios from "axios"
 
 class Comments extends React.Component {
+    static contextType = UserContext;
+
     constructor(props) {
         super(props);
         this.state = { 
-            comments: [
-                // Simple comment without networking for now
-                { 
-                    created_at: new Date().toISOString(),
-                    message: "Hello world",
-                    user: {
-                        avatar: "/images/avatar1.jpg",
-                        name: "John Doe",
-                        id: 1
-                    },
-                    id: 1,
-                    user_id: 1
-                }
-            ] 
+            comments: [],
+            votes: []
         };
+    }
+
+    async loadComments() {
+        const response = await axios({
+            method: "get",
+            url: '/api/comments',
+            headers: await this.context.getAuthHeaders()
+        })
+        this.setState(response.data)
+    }
+
+    componentDidMount() {
+        this.loadComments().catch(console.error)
     }
 
     render() {
         return (
             <section id="comments">
                 <h2>Discussion</h2>
-                <form id="comment-form">
-                    <figure className="avatar">
-                        <img src="/images/avatar.jpg" width="60" height="60" alt="Avatar" id="current-avatar" />
-                    </figure>
-                    <textarea id="comment-message" name="message" placeholder="What are your thoughts?"></textarea>
-                    <button type="submit" className="button primary">Comment</button>
-                </form>
+                <CommentForm />
     
                 <hr className="style-hr" />
     
