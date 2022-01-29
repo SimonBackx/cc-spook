@@ -20,6 +20,26 @@ class Comments extends React.Component {
 
     componentDidMount() {
         this.loadComments().catch(console.error)
+        
+        const ws = new WebSocket("ws://" + window.location.host + "/ws");
+        this.ws = ws
+
+        ws.onopen = () => {
+            console.log("Opened ws connection")
+        };
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data)
+
+            console.log("Received websocket message", message)
+            if (message.updateComment) {
+                this.setVotes(message.updateComment, message.updateComment.votes)
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        this.ws?.close()
     }
 
     async loadComments() {
@@ -36,22 +56,28 @@ class Comments extends React.Component {
     }
 
     setVotes(comment, votes) {
-        this.setState({
-            comments: this.state.comments.map(c => c.id === comment.id ? { ...c, votes } : c)
+        this.setState(currentState => {
+            return {
+                comments: currentState.comments.map(c => c.id === comment.id ? { ...c, votes } : c)
+            }
         })
     }
 
     removeVote(comment) {
-        this.setVotes(comment, comment.votes - 1)
-        this.setState({
-            votes: this.state.votes.filter(vote => vote.comment_id !== comment.id)
+        // Don't update the vote count here, wait for the websocket message (or we get a race condition)
+        this.setState(currentState => {
+            return {
+                votes: currentState.votes.filter(vote => vote.comment_id !== comment.id)
+            }
         })
     }
 
     addVote(comment, vote) {
-        this.setVotes(comment, comment.votes + 1)
-        this.setState({
-            votes: [...this.state.votes, vote]
+        // Don't update the vote count here, wait for the websocket message (or we get a race condition)
+        this.setState(currentState => {
+            return {
+                votes: [...currentState.votes, vote]
+            }
         })
     }
 

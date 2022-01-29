@@ -80,8 +80,8 @@ const UserProvider = ({ children }) => {
     const [user, setUser] = useState(getFromStorage());
     let _pendingSignIn = null;
 
-    async function signInIfNeeded() {
-        if (!user) {
+    async function signInIfNeeded(force = false) {
+        if (force || !user) {
             _pendingSignIn = _pendingSignIn ?? signIn()
             const result = await _pendingSignIn
             _pendingSignIn = null
@@ -106,12 +106,29 @@ const UserProvider = ({ children }) => {
     }
 
 
-    async function getAuthHeaders() {
-        const user = await signInIfNeeded()
+    async function getAuthHeaders(force = false) {
+        const user = await signInIfNeeded(force)
         return {
             "Authorization": "USER_ID "+user.id
         }
     }
+
+    // Intercept auth errors (e.g. when a user is signed out automatically -> removed in database)
+    axios.interceptors.response.use(response => response, error => {
+        if (error.response && error.response.status === 401 && !error.config._didRetry) {
+            console.error("User is signed out")
+
+            // Retry
+            setUser(null)
+            return getAuthHeaders(true).then((headers) => {
+                const config = error.config;
+                config._didRetry = true;
+                config.headers = headers;
+                return axios(config);
+            })
+        }
+        return error;
+    });
 
     signInIfNeeded().catch(console.error);
 
