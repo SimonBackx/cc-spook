@@ -11,9 +11,14 @@ module.exports = async function(req, res) {
     if (!req.body.name || req.body.name.length < 1 || typeof req.body.name !== 'string') {
         throw new ClientError("Invalid name")
     }
+
+    if (!req.body.avatar || req.body.avatar.length < 1 || typeof req.body.avatar !== 'string' || !req.body.avatar.startsWith("/images/avatar") || !req.body.avatar.endsWith(".jpg")) {
+        throw new ClientError("Invalid avatar")
+    }
     
     const user = new User({
-        name: req.body.name
+        name: req.body.name,
+        avatar: req.body.avatar
     })
 
     await user.save()

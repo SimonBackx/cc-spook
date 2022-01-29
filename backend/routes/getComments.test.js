@@ -9,10 +9,10 @@ let comment, commentEncoded;
 
 describe("Get comments", () => {
     beforeAll(async () => {
-        user = new User({ name: "Test user" })
+        user = new User({ name: "Test user", avatar: "/images/avatar1.jpg" })
         await user.save()
 
-        otherUser = new User({ name: "Other test user" })
+        otherUser = new User({ name: "Other test user", avatar: "/images/avatar1.jpg" })
         await otherUser.save()
     })
 
@@ -40,7 +40,8 @@ describe("Get comments", () => {
             votes: 0,
             user: {
                 id: user.id,
-                name: "Test user"
+                name: "Test user",
+                avatar: "/images/avatar1.jpg"
             }
         };
 

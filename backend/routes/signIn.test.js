@@ -4,7 +4,8 @@ const request = require('supertest');
 describe("Sign in", () => {
     test("create a new user", async () => {
         const name = "Test User"
-        const response = await request(app).post('/api/sign-in').send({ name })
+        const avatar = "/images/avatar1.jpg"
+        const response = await request(app).post('/api/sign-in').send({ name, avatar })
         
         expect(response.status).toEqual(200);
         expect(response.body.name).toEqual(name);
@@ -13,7 +14,8 @@ describe("Sign in", () => {
 
     test("empty name", async () => {
         const name = ""
-        const response = await request(app).post('/api/sign-in').send({ name })
+        const avatar = "/images/avatar1.jpg"
+        const response = await request(app).post('/api/sign-in').send({ name, avatar })
         
         expect(response.status).toEqual(400);
     });

@@ -5,7 +5,7 @@ const User = require('../models/User');
 let user;
 describe("Create comment", () => {
     beforeAll(async () => {
-        user = new User({ name: "Test user" })
+        user = new User({ name: "Test user", avatar: "/images/avatar1.jpg" })
         await user.save()
     })
 
@@ -20,6 +20,7 @@ describe("Create comment", () => {
         expect(response.body.user_id).toEqual(user.id);
         expect(response.body.user.name).toEqual("Test user");
         expect(response.body.user.id).toEqual(user.id);
+        expect(response.body.user.avatar).toEqual("/images/avatar1.jpg");
     });
 
     test("authentication is required", async () => {

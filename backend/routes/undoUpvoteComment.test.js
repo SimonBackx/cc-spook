@@ -8,10 +8,10 @@ let user, user2, comment;
 
 describe("Undo upvote", () => {
     beforeAll(async () => {
-        user = new User({ name: "Test user" })
+        user = new User({ name: "Test user", avatar: "/images/avatar1.jpg" })
         await user.save()
 
-        user2 = new User({ name: "Test user 2" })
+        user2 = new User({ name: "Test user 2", avatar: "/images/avatar1.jpg" })
         await user2.save()
 
         comment = new Comment({ message: "Hello world", user_id: user.id, votes: 2 })

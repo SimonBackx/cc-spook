@@ -7,7 +7,7 @@ let user, comment;
 
 describe("Upvote comment", () => {
     beforeAll(async () => {
-        user = new User({ name: "Test user" })
+        user = new User({ name: "Test user", avatar: "/images/avatar1.jpg" })
         await user.save()
 
         comment = new Comment({ message: "Hello world", user_id: user.id })
