@@ -26,6 +26,10 @@ I decided to not use yarn workspaces because that might be too dependent on the 
 
 I decided to use some new technologies (Bookshelf, Knex and React) I didn't have experience with. So this was also a good learning opportunity for me.
 
+### HMR in frontend
+
+The HMR (`yarn start` in the frontend folder) for the React app is not yet supported because currently the project expects the frontend and backend to be hosted by the same server. We could get around this by setting up CORS headers in the backend and adding some extra configuration files in the frontend. But I wanted to avoid having to make the setup more complicated for this small demonstration (since the frontend would need to know the port and host of the backend server and have its own environment). A different approach would be to proxy the HMR server through the Express backend.
+
 ## Running the project locally
 
 ### What you need
