@@ -1,8 +1,30 @@
 # CC-Spook
 
-This project is split into two packages: one for the frontend code and one for the backend code. The backend server depends on the frontend because it will host the static contents, for convenience.
+This project is split into two packages: one for the frontend code and one for the backend code. The backend server depends on the frontend because it will host the static contents, for convenience. You can find a full overview of the project structure below.
 
-Note that I decided to not use yarn workspaces because that might be too dependent on the yarn version you are using.
+## Notes
+
+### Yarn workspaces
+
+I decided to not use yarn workspaces because that might be too dependent on the yarn version you are using locally.
+
+### Authentication
+
+- Every time you open a new browser window or tab, you'll login as a different, newly created user. You stay logged in after a page reload.
+- Authentication information is stored in SessionStorage
+- Authentication uses the user id's as tokens (in the Authorization header), which obviously is not secure, but could easily get replaced with secure access and refresh tokens.
+    - Handled inside `backend/middleware/auth.js` and `frontend/src/context/UserContext.js`
+
+### Used technologies and libraries
+
+- Node.js, JavaScript, CSS (used SCSS here), HTML, React
+- Bookshelf.js with Knex.js for connecting with the database, the models and migrations
+- Express.js for the backend routes
+- Jest for running tests
+- Websockets to sync upvotes in real-time
+- Axios (to save some time having to write XMLHttpRequest boilerplate code)
+
+I decided to use some new technologies (Bookshelf, Knex and React) I didn't have experience with. So this was also a good learning opportunity for me.
 
 ## Running the project locally
 
@@ -76,13 +98,18 @@ The backend tests use an in memory SQLite database, so no extra database or envi
     - `tests/`: Jest setup scripts
     - `.env`: Your environment file
     - `index.js`: Runs the server with the .env environment file
+    - `server.js`: Express server setup without starting the server (used in tests)
+    - `websocketServer.js`: Websocket server and methods
     - `knexfile.js`: Config file to run the migrations
 - `frontend/`: Frontend project
-    - `dist/`: Generated frontend assets that will get served in the root directory of the backend server
-        - `css/`: The compiled css files
-    - `scss/`: Sass files
-        - `base/`: The SCSS files that are often used by others (variables, styles...)
-        - `components/`: Reusable CSS for specific parts of a page
-        - `elements/`: CSS that is bound to HTML element tags (no classes or ids)
-    - `static/`: All the static assets of the frontend. These will get served in the root directory of the backend server.
-    
+    - `build/`: Webpack will build the project to this (gitignored) directory
+    - `src/`: Source files, not compiled
+        - `components/`: All React components
+        - `contexts/`: React Context and providers (mainly for authentication)
+        - `helpers/`: Helper methods (e.g. formatting)
+        - `scss/`: Sass files
+            - `base/`: The SCSS files that are often used by others (variables, styles...)
+            - `components/`: SCSS that is associated with a given (React) component. For now, these are all imported via the `index.scss` file, but we could move the individual scss files to get only imported with the corresponding React component (that would allow to do some code chunking in the future)
+            - `elements/`: CSS that is bound to HTML element tags (no classes or ids)
+        - `App.js`: Main React component
+        - `index.js`: starting point of the frontend app (mounts the App component to the DOM)
