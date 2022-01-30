@@ -18,6 +18,12 @@ class CommentForm extends React.Component {
     async submitForm(event) {
         event.preventDefault();
         const message = this.state.message;
+
+        if (message.length === 0) {
+            alert("Please enter a message");
+            return;
+        }
+
         try {
             const response = await axios({
                 method: "post",
