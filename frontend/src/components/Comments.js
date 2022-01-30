@@ -126,7 +126,18 @@ class Comments extends React.Component {
                             </div>
                         )
                     }
-                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} updateComment={this.updateComment} addVote={this.addVote} removeVote={this.removeVote} />) }
+                    { 
+                        this.state.comments.map(comment => 
+                            <Comment 
+                                comment={comment} 
+                                votes={this.state.votes} 
+                                key={comment.id} 
+                                updateComment={this.updateComment} 
+                                addVote={this.addVote} 
+                                removeVote={this.removeVote} 
+                            />
+                        ) 
+                    }
                 </div>
             </section>
         );

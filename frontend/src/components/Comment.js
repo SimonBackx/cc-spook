@@ -102,11 +102,28 @@ class Comment extends React.Component {
                     </header>
                     <p>{this.props.comment.message}</p>
                     <footer>
-                        <button type="button" className={"button secundary"+(this.isUpvoted() ? " selected" : "")} onClick={this.onClickUpVote}><span className="icon arrow-up"></span><span>Upvote{this.props.comment.votes > 0 && ` (${this.props.comment.votes})`}</span></button>
-                        <button type="button" className={"button secundary"+(this.state.openReply ? " selected" : "")} onClick={this.toggleRelyForm}>Reply</button>
+                        <button type="button" className={"button secundary"+(this.isUpvoted() ? " selected" : "")} onClick={this.onClickUpVote}>
+                            <span className="icon arrow-up"></span>
+                            <span>
+                                Upvote{this.props.comment.votes > 0 && ` (${this.props.comment.votes})`}
+                            </span>
+                        </button>
+                        <button type="button" className={"button secundary"+(this.state.openReply ? " selected" : "")} onClick={this.toggleRelyForm}>
+                            Reply
+                        </button>
                     </footer>
                     <div class="children">
-                        {this.props.comment.children.map(comment => <Comment comment={comment} votes={this.props.votes} key={comment.id} addVote={this.props.addVote} removeVote={this.props.removeVote} />)}
+                        {
+                            this.props.comment.children.map(comment => 
+                                <Comment 
+                                    comment={comment} 
+                                    votes={this.props.votes} 
+                                    key={comment.id} 
+                                    addVote={this.props.addVote} 
+                                    removeVote={this.props.removeVote} 
+                                />
+                            )
+                        }
                         {this.state.openReply && <CommentForm addComment={this.addReply} parentId={this.props.comment.id} />}
                     </div>
                 </main>
