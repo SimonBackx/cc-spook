@@ -5,7 +5,7 @@ const Comment = require('../models/Comment');
 const Vote = require('../models/Vote');
 
 let user, otherUser;
-let comment, commentEncoded;
+let comment, commentEncoded, comment2, comment2Encoded, comment3, comment3Encoded;
 
 describe("Get comments", () => {
     beforeAll(async () => {
@@ -27,8 +27,7 @@ describe("Get comments", () => {
 
     test("get comments, authenticated, without votes", async () => {
         // Create a comment
-        comment = new Comment({ message: "Hello world", user_id: user.id })
-        await comment.save()
+        comment = await new Comment({ message: "Hello world", user_id: user.id }).save()
         
         // Expected encoded value for comment
         commentEncoded = {
@@ -37,12 +36,14 @@ describe("Get comments", () => {
             created_at: expect.any(String),
             updated_at: expect.any(String),
             user_id: user.id,
+            parent_id: null,
             votes: 0,
             user: {
                 id: user.id,
                 name: "Test user",
                 avatar: "/images/avatar1.jpg"
-            }
+            },
+            children: []
         };
 
         // Check if we get this comment
@@ -55,11 +56,9 @@ describe("Get comments", () => {
 
     test("get comments, authenticated, with votes", async () => {
         // Create votes
-        vote = new Vote({ comment_id: comment.id, user_id: user.id })
-        await vote.save()
+        vote = await new Vote({ comment_id: comment.id, user_id: user.id }).save()
 
-        const otherVote = new Vote({ comment_id: comment.id, user_id: otherUser.id })
-        await otherVote.save()
+        await new Vote({ comment_id: comment.id, user_id: otherUser.id }).save()
 
         // Check if we get this comment
         const response = await request(app).get('/api/comments').set("Authorization", "USER_ID "+user.id).send()
@@ -82,41 +81,94 @@ describe("Get comments", () => {
 
     test("get sorted comments", async () => {
         // Create two new comments, one that should be before the existing and one that should be after (to test the sorting correctly and prevent default sorting by id)
-        const comment2 = new Comment({ message: "Hello world2", user_id: user.id, created_at: new Date(2000, 0, 1).toISOString() })
-        await comment2.save()
-
-        const comment3 = new Comment({ message: "Hello world3", user_id: user.id })
-        await comment3.save()
+        comment2 = await new Comment({ message: "Hello world2", user_id: user.id, created_at: new Date(2000, 0, 1).toISOString() }).save()
+        comment3 = await new Comment({ message: "Hello world3", user_id: user.id }).save()
         
         // Expected encoded value for comment
-        const comment2Encoded = {
+        comment2Encoded = {
             id: expect.any(Number),
             message: "Hello world2",
             created_at: expect.any(String),
             updated_at: expect.any(String),
             user_id: user.id,
+            parent_id: null,
             votes: 0,
             user: {
                 id: user.id,
                 name: "Test user",
                 avatar: "/images/avatar1.jpg"
-            }
+            },
+            children: []
         };
 
         // Expected encoded value for comment
-        const comment3Encoded = {
+        comment3Encoded = {
             id: expect.any(Number),
             message: "Hello world3",
             created_at: expect.any(String),
             updated_at: expect.any(String),
             user_id: user.id,
+            parent_id: null,
             votes: 0,
             user: {
                 id: user.id,
                 name: "Test user",
                 avatar: "/images/avatar1.jpg"
-            }
+            },
+            children: []
         };
+
+        // Check if we get this comment
+        const response = await request(app).get('/api/comments').send()
+        
+        expect(response.status).toEqual(200);
+        expect(response.body.comments).toEqual([comment2Encoded, commentEncoded, comment3Encoded]);
+        expect(response.body.votes).toEqual([]);
+    });
+
+    test("get nested comments", async () => {
+        // Create a comment in the future (needed because we can't create replies to comments before the main comment created date)
+        await new Comment({ message: "Nested comment", user_id: user.id, parent_id: comment.id, created_at: new Date(2200, 0, 1).toISOString() }).save()
+
+        // Create an older nested comment, which should go before the previous one
+        await new Comment({ message: "Nested comment 2", user_id: user.id, parent_id: comment.id }).save()
+        
+        // Expected encoded value for comment
+        nestedCommentEncoded = {
+            id: expect.any(Number),
+            message: "Nested comment",
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            user_id: user.id,
+            parent_id: comment.id,
+            votes: 0,
+            user: {
+                id: user.id,
+                name: "Test user",
+                avatar: "/images/avatar1.jpg"
+            },
+            children: []
+        };
+
+        // Expected encoded value for comment
+        nestedComment2Encoded = {
+            id: expect.any(Number),
+            message: "Nested comment 2",
+            created_at: expect.any(String),
+            updated_at: expect.any(String),
+            user_id: user.id,
+            parent_id: comment.id,
+            votes: 0,
+            user: {
+                id: user.id,
+                name: "Test user",
+                avatar: "/images/avatar1.jpg"
+            },
+            children: []
+        };
+
+        commentEncoded.children.push(nestedComment2Encoded)
+        commentEncoded.children.push(nestedCommentEncoded)
 
         // Check if we get this comment
         const response = await request(app).get('/api/comments').send()

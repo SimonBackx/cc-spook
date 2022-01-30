@@ -11,7 +11,7 @@ module.exports = async function(req, res) {
     }
     const comment_id = parseInt(req.params.comment_id);
 
-    if (!Number.isInteger(comment_id)) {
+    if (!Number.isSafeInteger(comment_id)) {
         throw new ClientError("Invalid comment_id")
     }
 

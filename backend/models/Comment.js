@@ -5,5 +5,8 @@ module.exports = bookshelf.model('Comment', {
     tableName: 'comments',
     user() {
         return this.belongsTo('User')
+    },
+    parent() {
+        return this.belongsTo('Comment')
     }
 })
