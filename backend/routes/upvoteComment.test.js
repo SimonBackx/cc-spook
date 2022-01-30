@@ -3,7 +3,7 @@ const request = require('supertest');
 const Comment = require('../models/Comment');
 const User = require('../models/User');
 
-let user, comment;
+let user, comment, comment2;
 
 describe("Upvote comment", () => {
     beforeAll(async () => {
@@ -12,6 +12,9 @@ describe("Upvote comment", () => {
 
         comment = new Comment({ message: "Hello world", user_id: user.id })
         await comment.save()
+
+        comment2 = new Comment({ message: "Hello world 2", user_id: user.id })
+        await comment2.save()
     })
 
     test("upvote a comment", async () => {
@@ -38,5 +41,9 @@ describe("Upvote comment", () => {
         // Check if the vote cache stayed the same
         await comment.refresh()
         expect(comment.get("votes")).toEqual(1);
+    });
+
+    test("upvote a comment has no side effects", async () => {
+        expect(comment2.get("votes")).toEqual(0);
     });
 })

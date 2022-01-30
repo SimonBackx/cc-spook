@@ -4,7 +4,7 @@ const Comment = require('../models/Comment');
 const User = require('../models/User');
 const Vote = require('../models/Vote');
 
-let user, user2, comment;
+let user, user2, comment, comment2;
 
 describe("Undo upvote", () => {
     beforeAll(async () => {
@@ -16,6 +16,9 @@ describe("Undo upvote", () => {
 
         comment = new Comment({ message: "Hello world", user_id: user.id, votes: 2 })
         await comment.save()
+
+        comment2 = new Comment({ message: "Hello world 2", user_id: user.id, votes: 2 })
+        await comment2.save()
 
         await Promise.allSettled([
             new Vote({ comment_id: comment.id, user_id: user.id }).save(),
@@ -50,5 +53,9 @@ describe("Undo upvote", () => {
 
         await comment.refresh()
         expect(comment.get("votes")).toEqual(0);
+    });
+
+    test("undo upvote has no side effects", async () => {
+        expect(comment2.get("votes")).toEqual(2);
     });
 })

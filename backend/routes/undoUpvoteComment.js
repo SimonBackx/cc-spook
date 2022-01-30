@@ -28,7 +28,7 @@ module.exports = async function(req, res) {
     try {
         await bookshelf.transaction(async trx => {
             await exists.destroy({ require: false, transacting: trx })
-            await new Comment({ id: comment_id }).query().decrement('votes', 1).transacting(trx)
+            await Comment.query().where('id', comment_id).decrement('votes', 1).transacting(trx)
         });
     } catch (e) {
         throw new ClientError("Invalid comment")
