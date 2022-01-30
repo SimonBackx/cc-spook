@@ -2,6 +2,13 @@
 
 This project is split into two packages: one for the frontend code and one for the backend code. The backend server depends on the frontend because it will host the static contents, for convenience. You can find a full overview of the project structure below.
 
+## Live server
+
+Try it out yourself on my hosted server, or run it locally (steps below).
+
+- [V1 @ spook-v1.simonbackx.com](http://spook-v1.simonbackx.com)
+- [V2 @ spook-v2.simonbackx.com](http://spook-v2.simonbackx.com)
+
 ## Notes
 
 ### Yarn workspaces
@@ -31,12 +38,16 @@ I decided to use some new technologies (Bookshelf, Knex and React) I didn't have
 
 The HMR (`yarn start` in the frontend folder) for the React app is not yet supported because currently the project expects the frontend and backend to be hosted by the same server. We could get around this by setting up CORS headers in the backend and adding some extra configuration files in the frontend. But I wanted to avoid having to make the setup more complicated for this small demonstration (since the frontend would need to know the port and host of the backend server and have its own environment). A different approach would be to proxy the HMR server through the Express backend.
 
+### Internet connection
+
+Note that the project doesn't include automatic network retries and loading indicators. If you run the project locally, this isn't needed, but for the hosted version you will need a reliable internet connection.
+
 ## Running the project locally
 
 ### What you need
 
 - Yarn
-- A MySQL server locally (or easily accessible without SSL), with a clean database
+- A MySQL server locally (or easily accessible), with a clean database, with legacy password encryption (MySQL 5.x) enabled
 
 ### Step by step
 
@@ -49,7 +60,7 @@ yarn install
 cd ..
 ```
 
-2. Compile the SCSS code in the frontend package.
+2. Compile the frontend app
 ```bash
 cd frontend
 yarn build
@@ -64,6 +75,7 @@ DB_HOST=127.0.0.1
 DB_USER=root
 DB_PASSWORD=your-password
 DB_DATABASE=cc-spook
+DB_PORT=3306
 ```
 
 4. Run the migrations
