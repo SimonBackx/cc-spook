@@ -42,6 +42,10 @@ The HMR (`yarn start` in the frontend folder) for the React app is not yet suppo
 
 Note that the project doesn't include automatic network retries and loading indicators. If you run the project locally, this isn't needed, but for the hosted version you will need a reliable internet connection.
 
+### Commit times
+
+The commit times are a bit messed up since V1 because I found a bug (commit [`661fb44`](https://github.com/SimonBackx/cc-spook/commit/661fb441d49edd1dff5707d560627bd7a73082cc)) in V1 when I already started working on V2. So I made the fixes on the V1 tag and rebased the main branch onto those fixes.
+
 ## Running the project locally
 
 ### What you need
