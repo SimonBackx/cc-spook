@@ -42,7 +42,7 @@ class CommentForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.submitForm}>
+            <form onSubmit={this.submitForm} className="comment-form">
                 <figure className="avatar">
                     { this.context.user ? <img src={this.context.user.avatar} width="60" height="60" alt="Avatar"/> : <span /> }
                 </figure>

@@ -33,7 +33,7 @@ class Comments extends React.Component {
 
             console.log("Received websocket message", message)
             if (message.updateComment) {
-                this.setVotes(message.updateComment, message.updateComment.votes)
+                this.updateComment(message.updateComment)
             }
         }
     }
@@ -49,6 +49,14 @@ class Comments extends React.Component {
             headers: await this.context.getAuthHeaders()
         })
         this.setState(response.data)
+    }
+
+    updateComment(comment) {
+        this.setState(currentState => {
+            return {
+                comments: currentState.comments.map(c => c.id === comment.id ? comment : c)
+            }   
+        })
     }
 
     addComment(comment) {
@@ -97,7 +105,7 @@ class Comments extends React.Component {
                             </div>
                         )
                     }
-                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} addVote={(vote) => this.addVote(comment, vote)} removeVote={() => this.removeVote(comment)}/>) }
+                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} updateComment={(c) => this.updateComment(c)} addVote={(vote) => this.addVote(comment, vote)} removeVote={() => this.removeVote(comment)}/>) }
                 </div>
             </section>
         );

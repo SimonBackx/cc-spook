@@ -1,0 +1,37 @@
+@use "../base/text-styles.scss" as *;
+@use "../base/variables.scss" as *;
+
+.comment-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    textarea {
+        background: white;
+        border-radius: $border-radius;
+        border: 1px solid $color-border;
+        height: 30px;
+        box-sizing: border-box;
+        line-height: 20px;
+        padding: 5px 9px;
+        flex-grow: 1;
+        resize: none;
+        min-width: 0;
+        @extend .style-input;
+        
+        &::placeholder {
+            @extend .style-placeholder;
+            line-height: 20px;
+        }
+
+        &:focus {
+            border-color: $color-primary;
+        }
+    }
+
+    button {
+        flex-shrink: 0;
+        margin-left: 13px;
+    }
+
+}
