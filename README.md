@@ -19,6 +19,7 @@ I decided to not use yarn workspaces because that might be too dependent on the 
 
 - Node.js, JavaScript, CSS (used SCSS here), HTML, React
 - Bookshelf.js with Knex.js for connecting with the database, the models and migrations
+- MySQL (and SQLite for tests)
 - Express.js for the backend routes
 - Jest for running tests
 - Websockets to sync upvotes in real-time
