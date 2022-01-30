@@ -66,7 +66,7 @@
                     transition: transform 0.15s;
                 }
     
-                &.voted {
+                &.selected {
                     color: $color-primary;
     
                     > .icon {

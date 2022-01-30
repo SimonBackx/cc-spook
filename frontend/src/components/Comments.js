@@ -16,6 +16,9 @@ class Comments extends React.Component {
 
         this.addComment = this.addComment.bind(this);
         this.setVotes = this.setVotes.bind(this);
+        this.addVote = this.addVote.bind(this);
+        this.removeVote = this.removeVote.bind(this);
+        this.updateComment = this.updateComment.bind(this);
     }
 
     componentDidMount() {
@@ -51,13 +54,31 @@ class Comments extends React.Component {
         this.setState(response.data)
     }
 
+    /**
+     * Update one, or more properties of a comment (id and parent_id property should always be set)
+     */
     updateComment(comment) {
+        console.log("Updating comment", comment)
         this.setState(currentState => {
             return {
-                comments: currentState.comments.map(c => c.id === comment.id ? comment : c)
+                comments: this.updateCommentInComments(currentState.comments, comment)
             }   
         })
     }
+
+    // Helper method to recursively update comments
+    updateCommentInComments(comments, comment) {
+        return comments.map(c => {
+            if (c.id === comment.id) {
+                return { ...c, ...comment}
+            }
+            if (c.id === comment.parent_id) {
+                return { ...c, children: this.updateCommentInComments(c.children, comment) }
+            }
+            return c
+        })
+    }   
+
 
     addComment(comment) {
         this.setState({ comments: [comment, ...this.state.comments] })
@@ -71,16 +92,16 @@ class Comments extends React.Component {
         })
     }
 
-    removeVote(comment) {
+    removeVote(vote) {
         // Don't update the vote count here, wait for the websocket message (or we get a race condition)
         this.setState(currentState => {
             return {
-                votes: currentState.votes.filter(vote => vote.comment_id !== comment.id)
+                votes: currentState.votes.filter(v => v.id !== vote.id)
             }
         })
     }
 
-    addVote(comment, vote) {
+    addVote(vote) {
         // Don't update the vote count here, wait for the websocket message (or we get a race condition)
         this.setState(currentState => {
             return {
@@ -105,7 +126,7 @@ class Comments extends React.Component {
                             </div>
                         )
                     }
-                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} updateComment={(c) => this.updateComment(c)} addVote={(vote) => this.addVote(comment, vote)} removeVote={() => this.removeVote(comment)}/>) }
+                    { this.state.comments.map(comment => <Comment comment={comment} votes={this.state.votes} key={comment.id} updateComment={this.updateComment} addVote={this.addVote} removeVote={this.removeVote} />) }
                 </div>
             </section>
         );

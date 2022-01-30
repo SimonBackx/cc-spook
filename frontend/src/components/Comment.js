@@ -53,6 +53,7 @@ class Comment extends React.Component {
 
     async undoUpvote() {
         try {
+            const vote = this.currentVote()
             await axios({
                 method: "post",
                 url: '/api/upvote/'+this.props.comment.id+'/undo', 
@@ -60,7 +61,7 @@ class Comment extends React.Component {
             })
     
             // Remove current vote
-            this.props.removeVote()
+            this.props.removeVote(vote)
 
         } catch (e) {
             console.error(e)
@@ -68,10 +69,18 @@ class Comment extends React.Component {
     }
 
     addReply(comment) {
-        this.props.updateComment({...this.props.comment, children: [...this.props.comment.children, comment]})
+        this.props.updateComment({ id: this.props.comment.id, parent_id: this.props.comment.parent_id, children: [...this.props.comment.children, comment]})
+        
+        // Close reply form again
+        this.toggleRelyForm()
     }
 
     toggleRelyForm() {
+        if (!this.props.updateComment) {
+            alert("Sorry, replies to other replies are not yet supported")
+            return
+        }
+
         this.setState(currentState => {
             return {
                 openReply: !currentState.openReply
@@ -93,10 +102,11 @@ class Comment extends React.Component {
                     </header>
                     <p>{this.props.comment.message}</p>
                     <footer>
-                        <button type="button" className={"button secundary"+(this.isUpvoted() ? " voted" : "")} onClick={this.onClickUpVote}><span className="icon arrow-up"></span><span>Upvote ({this.props.comment.votes})</span></button>
-                        <button type="button" className="button secundary" onClick={this.toggleRelyForm}>Reply</button>
+                        <button type="button" className={"button secundary"+(this.isUpvoted() ? " selected" : "")} onClick={this.onClickUpVote}><span className="icon arrow-up"></span><span>Upvote ({this.props.comment.votes})</span></button>
+                        <button type="button" className={"button secundary"+(this.state.openReply ? " selected" : "")} onClick={this.toggleRelyForm}>Reply</button>
                     </footer>
                     <div class="children">
+                        {this.props.comment.children.map(comment => <Comment comment={comment} votes={this.props.votes} key={comment.id} addVote={this.props.addVote} removeVote={this.props.removeVote} />)}
                         {this.state.openReply && <CommentForm addComment={this.addReply} parentId={this.props.comment.id} />}
                     </div>
                 </main>

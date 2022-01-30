@@ -22,7 +22,10 @@ class CommentForm extends React.Component {
             const response = await axios({
                 method: "post",
                 url: '/api/comments', 
-                data: { message },
+                data: { 
+                    message, 
+                    parent_id: this.props.parentId ?? undefined 
+                },
                 headers: await this.context.getAuthHeaders()
             })
         
